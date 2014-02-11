@@ -17,32 +17,33 @@ import javax.persistence.criteria.Root;
 
 @RequestScoped
 public class MemberListProducer {
-   @Inject
-   private EntityManager em;
 
-   private List<Member> members;
+    @Inject
+    private EntityManager em;
 
-   // @Named provides access the return value via the EL variable name "members" in the UI (e.g.,
-   // Facelets or JSP view)
-   @Produces
-   @Named
-   public List<Member> getMembers() {
-      return members;
-   }
+    private List<Member> members;
 
-   public void onMemberListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Member member) {
-      retrieveAllMembersOrderedByName();
-   }
+    // @Named provides access the return value via the EL variable name "members" in the UI (e.g.,
+    // Facelets or JSP view)
+    @Produces
+    @Named
+    public List<Member> getMembers() {
+        return members;
+    }
 
-   @PostConstruct
-   public void retrieveAllMembersOrderedByName() {
-      CriteriaBuilder cb = em.getCriteriaBuilder();
-      CriteriaQuery<Member> criteria = cb.createQuery(Member.class);
-      Root<Member> member = criteria.from(Member.class);
-      // Swap criteria statements if you would like to try out type-safe criteria queries, a new
-      // feature in JPA 2.0
-      // criteria.select(member).orderBy(cb.asc(member.get(Member_.name)));
-      criteria.select(member).orderBy(cb.asc(member.get("name")));
-      members = em.createQuery(criteria).getResultList();
-   }
+    public void onMemberListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Member member) {
+        retrieveAllMembersOrderedByName();
+    }
+
+    @PostConstruct
+    public void retrieveAllMembersOrderedByName() {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Member> criteria = cb.createQuery(Member.class);
+        Root<Member> member = criteria.from(Member.class);
+        // Swap criteria statements if you would like to try out type-safe criteria queries, a new
+        // feature in JPA 2.0
+        // criteria.select(member).orderBy(cb.asc(member.get(Member_.name)));
+        criteria.select(member).orderBy(cb.asc(member.get("name")));
+        members = em.createQuery(criteria).getResultList();
+    }
 }

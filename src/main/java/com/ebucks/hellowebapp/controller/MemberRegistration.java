@@ -22,32 +22,32 @@ import com.ebucks.hellowebapp.model.Member;
 @Model
 public class MemberRegistration {
 
-   @Inject
-   private Logger log;
+    @Inject
+    private Logger log;
 
-   @Inject
-   private EntityManager em;
+    @Inject
+    private EntityManager em;
 
-   @Inject
-   private Event<Member> memberEventSrc;
+    @Inject
+    private Event<Member> memberEventSrc;
 
-   private Member newMember;
+    private Member newMember;
 
-   @Produces
-   @Named
-   public Member getNewMember() {
-      return newMember;
-   }
+    @Produces
+    @Named
+    public Member getNewMember() {
+        return newMember;
+    }
 
-   public void register() throws Exception {
-      log.info("Registering " + newMember.getName());
-      em.persist(newMember);
-      memberEventSrc.fire(newMember);
-      initNewMember();
-   }
+    public void register() throws Exception {
+        log.info("Registering " + newMember.getName());
+        em.persist(newMember);
+        memberEventSrc.fire(newMember);
+        initNewMember();
+    }
 
-   @PostConstruct
-   public void initNewMember() {
-      newMember = new Member();
-   }
+    @PostConstruct
+    public void initNewMember() {
+        newMember = new Member();
+    }
 }
